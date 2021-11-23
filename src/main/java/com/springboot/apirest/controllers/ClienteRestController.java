@@ -2,6 +2,7 @@ package com.springboot.apirest.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +11,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -164,5 +168,28 @@ public class ClienteRestController {
 			response.put("mensaje", "Has subido correctamente la imagen: ".concat(name));
 		}
 		return new ResponseEntity<HashMap<String,Object>>(response, HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/uploads/img/{name:.+}")
+	public ResponseEntity<?> getImage(@PathVariable String name) {
+		HashMap<String,Object> response = new HashMap<>();
+		Path path = Paths.get("uploads").resolve(name).toAbsolutePath();
+		Resource recurso = null;
+		
+		try {
+			recurso = new UrlResource(path.toUri());
+		} catch (MalformedURLException e) {
+			response.put("mensaje", "Error al obtener la imagen. Revisa los datos introducidos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getCause().getMessage()));
+			return new ResponseEntity<HashMap<String,Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		
+		if (!recurso.exists() && !recurso.isReadable()) {
+			throw new RuntimeException("No se puede cargar la imagen ".concat(name));
+		}
+		
+		HttpHeaders cabecera = new HttpHeaders();
+		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\""+recurso.getFilename()+"\"");
+		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
 	}
 }
