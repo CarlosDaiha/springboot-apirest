@@ -103,7 +103,7 @@ public class ClienteRestController {
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al actualizar en base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<HashMap<String,Object>>(response, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<HashMap<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		response.put("mensaje", "El cliente se ha actualizado con éxito.");

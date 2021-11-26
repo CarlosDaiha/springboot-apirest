@@ -1,16 +1,19 @@
 package com.springboot.apirest.models.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "regiones")
-public class Region implements Serializable {
+@Table(name = "roles")
+public class Rol implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -20,6 +23,9 @@ public class Region implements Serializable {
 	
 	private String nombre;
 	
+	@ManyToMany(mappedBy = "roles")
+	private List<Usuario> usuarios = new LinkedList<>();
+
 	public Long getId() {
 		return id;
 	}
@@ -34,6 +40,14 @@ public class Region implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 }
