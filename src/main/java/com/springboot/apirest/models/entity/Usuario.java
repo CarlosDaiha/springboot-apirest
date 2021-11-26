@@ -1,11 +1,12 @@
 package com.springboot.apirest.models.entity;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "usuarios")
@@ -24,21 +26,21 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
 	private boolean enabled;
 
-	@Column(nullable = false)
+	@Column(length = 60)
 	private String password;
 
-	@Column(nullable = false, unique = true)
+	@Column(unique = true, length = 20)
 	private String username;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(
-			name = "usuario_rol", 
+			name = "usuarios_roles", 
 			joinColumns = @JoinColumn(name = "usuario_id"), 
-			inverseJoinColumns = @JoinColumn(name = "rol_id"))
-	private List<Rol> roles = new LinkedList<>();
+			inverseJoinColumns = @JoinColumn(name = "rol_id"),
+			uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "rol_id"})})
+	private List<Rol> roles;
 
 	public Long getId() {
 		return id;

@@ -1,7 +1,6 @@
 package com.springboot.apirest.models.entity;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ public class Rol implements Serializable {
 	private String nombre;
 	
 	@ManyToMany(mappedBy = "roles")
-	private List<Usuario> usuarios = new LinkedList<>();
+	private List<Usuario> usuarios;
 
 	public Long getId() {
 		return id;
