@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.apirest.models.entity.Cliente;
+import com.springboot.apirest.models.entity.Region;
 import com.springboot.apirest.models.services.ClienteService;
 
 @RestController
@@ -96,12 +97,14 @@ public class ClienteRestController {
 			clienteUpdated.setApellido(cliente.getApellido());
 			clienteUpdated.setEmail(cliente.getEmail());
 			clienteUpdated.setTelefono(cliente.getTelefono());
+			clienteUpdated.setRegion(cliente.getRegion());
+			
+			clienteService.save(clienteUpdated);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al actualizar en base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<HashMap<String,Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		clienteService.save(clienteUpdated);
 		
 		response.put("mensaje", "El cliente se ha actualizado con éxito.");
 		response.put("cliente", clienteUpdated);
@@ -191,5 +194,10 @@ public class ClienteRestController {
 		HttpHeaders cabecera = new HttpHeaders();
 		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\""+recurso.getFilename()+"\"");
 		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+	}
+	
+	@GetMapping("/clientes/regiones")
+	public List<Region> getRegions() {
+		return clienteService.findAllRegions();
 	}
 }
