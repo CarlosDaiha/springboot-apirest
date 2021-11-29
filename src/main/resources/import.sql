@@ -17,3 +17,13 @@ INSERT INTO clientes (region_id,nombre,apellido,email,telefono,create_at) VALUES
 INSERT INTO clientes (region_id,nombre,apellido,email,telefono,create_at) VALUES(8,'Enrique','Iglesias','ei@hotmail.com',65433223,'2021-07-01');
 INSERT INTO clientes (region_id,nombre,apellido,email,telefono,create_at) VALUES(1,'Pedro','Diaz','pd@hotmail.com',65433223,'2021-08-01');
 INSERT INTO clientes (region_id,nombre,apellido,email,telefono,create_at) VALUES(2,'Ramon','Gonzalez','rgonzalez@gmail.com',65433223,'2021-09-01');
+
+INSERT INTO usuarios (username,password,enabled) VALUES('Jose','$2a$10$qEfv0B3z/eYaHk3eD1MevObsO0ymQuoeusf672UmfhDZSeYYCpbbS',1);
+INSERT INTO usuarios (username,password,enabled) VALUES('Admin','$2a$10$8AYNsmRsBx.Twng/fgjk.e8H4CjZQcvqfVaA6zUMnoNqmdofK.zVq',1);
+
+INSERT INTO roles (nombre) VALUES('ROLE_USER');
+INSERT INTO roles (nombre) VALUES('ROLE_ADMIN');
+
+INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES(1,1);
+INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES(2,2);
+INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES(2,1);
